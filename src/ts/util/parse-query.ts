@@ -61,13 +61,19 @@ export const getModuleName = (str: string) => {
     if (/^https?\:\/\//.test(str)) {
         _str = fromBasename(str);
     } else if (name.length > 0) {
-        _str = name + (path ? fromBasename(path) : "")
+        _str = name + (path ? fromBasename(path) : "");
     }
     
-    return _str.split(/(?:-|_|\/)/g)
+    let result = _str.split(/(?:-|_|\/)/g)
         .map((x: string | any[], i: number) => i > 0 && x.length > 0 ? (x[0].toUpperCase() + x.slice(1)) : x)
         .join("")
-        .replace(/[^\w\s]/gi, "")
+        .replace(/[^\w\s]/gi, "");
+
+    //Prefixes the module with a letter if it starts with a digit
+    if (/^\d/.test(result)) {
+        result = "a" + result;
+    }
+    return result;
 }
 
 // Inspired by https://github.com/solidjs/solid-playground
